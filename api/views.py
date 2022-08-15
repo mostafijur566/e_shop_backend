@@ -61,7 +61,7 @@ class CustomerDetails(APIView):
 
         else:
             data = {
-                "message": "serializer.errors",
+                "message": serializer.errors
             }
             http_response = status.HTTP_400_BAD_REQUEST
         return Response(data, status=http_response)
@@ -72,7 +72,7 @@ class CustomerDetails(APIView):
 
         return Response(serializer.data)
 
-    def put(self, request, pk):
+    def put(self, request):
         customer = customerModel.objects.get(user=request.user)
         serializer = CustomerDetailsSerializers(customer, data=request.data)
         if serializer.is_valid():
@@ -88,4 +88,47 @@ class CustomerDetails(APIView):
             }
             http_response = status.HTTP_400_BAD_REQUEST
 
+        return Response(data, status=http_response)
+
+
+class ProductCategoriesView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request):
+        serializer = ProductCategoriesSerializers(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            data = {
+                "message": "Added successfully!",
+            }
+            http_response = status.HTTP_200_OK
+
+        else:
+            data = {
+                "message": serializer.errors
+            }
+            http_response = status.HTTP_400_BAD_REQUEST
+        return Response(data, status=http_response)
+
+    def get(self, request):
+        category = ProductCategories.objects.all()
+        serializer = ProductCategoriesSerializers(category, many=True)
+
+        return Response(serializer.data)
+
+    def put(self, request, pk):
+        category = ProductCategories.objects.get(id=pk)
+        serializer = ProductCategoriesSerializers(category, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            data = {
+                "message": "Updated successfully!",
+            }
+            http_response = status.HTTP_200_OK
+
+        else:
+            data = {
+                "message": serializer.errors
+            }
+            http_response = status.HTTP_400_BAD_REQUEST
         return Response(data, status=http_response)

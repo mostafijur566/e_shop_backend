@@ -32,3 +32,9 @@ class CustomerDetailsSerializers(serializers.ModelSerializer):
     class Meta:
         model = CustomerDetails
         fields = '__all__'
+
+
+class ProductCategoriesSerializers(serializers.ModelSerializer):
+    class Meta:
+        model = ProductCategories
+        fields = '__all__'
