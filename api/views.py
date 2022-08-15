@@ -132,3 +132,12 @@ class ProductCategoriesView(APIView):
             }
             http_response = status.HTTP_400_BAD_REQUEST
         return Response(data, status=http_response)
+
+    def delete(self, request, pk):
+        category = ProductCategories.objects.get(id=pk)
+        category.delete()
+        return Response(
+            {
+                "message": "Deleted successfully!"
+            }
+        )
