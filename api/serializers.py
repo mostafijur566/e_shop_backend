@@ -44,3 +44,21 @@ class ProductSerializers(serializers.ModelSerializer):
     class Meta:
         model = Product
         fields = '__all__'
+
+
+class OrderDetailsSerializers(serializers.ModelSerializer):
+    class Meta:
+        model = OrderDetails
+        fields = '__all__'
+
+
+class OrderSerializers(serializers.ModelSerializer):
+    class Meta:
+        model = Order
+        fields = '__all__'
+
+
+class OrderHistorySerializers(serializers.ModelSerializer):
+    class Meta:
+        model = OrderHistory
+        fields = '__all__'

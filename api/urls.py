@@ -21,4 +21,12 @@ urlpatterns = [
     # product
     path('api/v1/product/', ProductView.as_view()),
     path('api/v1/product/update/<str:pk>/', ProductView.as_view()),
+
+    # cart
+    path('api/v1/order/details/', OrderDetailsView.as_view()),
+    path('api/v1/order/details/<str:pk>/', OrderDetailsView.as_view()),
+
+    # order
+    path('api/v1/order/', OrderView.as_view()),
+    path('api/v1/order/history/', OrderHistoryView.as_view()),
 ]

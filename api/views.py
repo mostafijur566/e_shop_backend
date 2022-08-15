@@ -199,3 +199,124 @@ class ProductView(APIView):
                 "message": "Deleted successfully!"
             }
         )
+
+
+class OrderDetailsView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request):
+        serializer = OrderDetailsSerializers(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            data = {
+                "message": "Product added successfully!",
+            }
+            http_response = status.HTTP_200_OK
+
+        else:
+            data = {
+                "message": serializer.errors
+            }
+            http_response = status.HTTP_400_BAD_REQUEST
+
+        return Response(data, status=http_response)
+
+    def get(self, request):
+        order = OrderDetails.objects.all()
+        serializer = OrderDetailsSerializers(order, many=True)
+
+        return Response(
+            {
+                "total_order": Product.objects.count(),
+                "order": serializer.data
+            }
+        )
+
+    def put(self, request, pk):
+        order = OrderDetails.objects.get(id=pk)
+        serializer = OrderDetailsSerializers(order, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            data = {
+                "message": "Updated successfully!",
+            }
+            http_response = status.HTTP_200_OK
+
+        else:
+            data = {
+                "message": serializer.errors
+            }
+            http_response = status.HTTP_400_BAD_REQUEST
+        return Response(data, status=http_response)
+
+    def delete(self, request, pk):
+        order = OrderDetails.objects.get(id=pk)
+        order.delete()
+        return Response(
+            {
+                "message": "Deleted successfully!"
+            }
+        )
+
+
+class OrderView(APIView):
+    def get(self, request):
+        order = Order.objects.all()
+        serializer = OrderSerializers(order, many=True)
+
+        return Response(
+            {
+                "total_order": Product.objects.count(),
+                "order": serializer.data
+            }
+        )
+
+    def post(self, request):
+        serializer = OrderSerializers(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            data = {
+                "message": "Your order added successfully!",
+            }
+            http_response = status.HTTP_200_OK
+
+        else:
+            data = {
+                "message": serializer.errors
+            }
+            http_response = status.HTTP_400_BAD_REQUEST
+
+        return Response(data, status=http_response)
+
+
+class OrderHistoryView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request):
+        serializer = OrderHistorySerializers(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            data = {
+                "message": "Added to history",
+            }
+            http_response = status.HTTP_200_OK
+
+        else:
+            data = {
+                "message": serializer.errors
+            }
+            http_response = status.HTTP_400_BAD_REQUEST
+
+        return Response(data, status=http_response)
+
+    def get(self, request):
+        history = OrderHistory.objects.filter(user=request.user)
+        serializer = OrderHistorySerializers(history, many=True)
+
+        return Response(
+            {
+                "total_order": history.count(),
+                "order": serializer.data
+            }
+        )
+
