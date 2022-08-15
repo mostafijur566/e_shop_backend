@@ -17,4 +17,8 @@ urlpatterns = [
     # Product Category
     path('api/v1/product/category/', ProductCategoriesView.as_view()),
     path('api/v1/product/category/update/<str:pk>/', ProductCategoriesView.as_view()),
+
+    # product
+    path('api/v1/product/', ProductView.as_view()),
+    path('api/v1/product/update/<str:pk>/', ProductView.as_view()),
 ]

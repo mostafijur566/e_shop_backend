@@ -141,3 +141,61 @@ class ProductCategoriesView(APIView):
                 "message": "Deleted successfully!"
             }
         )
+
+
+class ProductView(APIView):
+    permission_classes = []
+
+    def post(self, request):
+        serializer = ProductSerializers(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            data = {
+                "message": "Added successfully!",
+            }
+            http_response = status.HTTP_200_OK
+
+        else:
+            data = {
+                "message": serializer.errors
+            }
+            http_response = status.HTTP_400_BAD_REQUEST
+
+        return Response(data, status=http_response)
+
+    def get(self, request):
+        product = Product.objects.all()
+        serializer = ProductSerializers(product, many=True)
+
+        return Response(
+            {
+                "total_product": Product.objects.count(),
+                "products": serializer.data
+            }
+        )
+
+    def put(self, request, pk):
+        product = Product.objects.get(id=pk)
+        serializer = ProductSerializers(product, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            data = {
+                "message": "Updated successfully!",
+            }
+            http_response = status.HTTP_200_OK
+
+        else:
+            data = {
+                "message": serializer.errors
+            }
+            http_response = status.HTTP_400_BAD_REQUEST
+        return Response(data, status=http_response)
+
+    def delete(self, request, pk):
+        product = Product.objects.get(id=pk)
+        product.delete()
+        return Response(
+            {
+                "message": "Deleted successfully!"
+            }
+        )
