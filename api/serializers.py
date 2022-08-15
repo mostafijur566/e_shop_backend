@@ -27,3 +27,8 @@ class RegistrationSerializers(serializers.ModelSerializer):
         account.save()
         return account
 
+
+class CustomerDetailsSerializers(serializers.ModelSerializer):
+    class Meta:
+        model = CustomerDetails
+        fields = '__all__'

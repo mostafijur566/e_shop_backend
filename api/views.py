@@ -4,6 +4,7 @@ from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 from rest_framework import status
 from .serializers import *
+from .models import CustomerDetails as customerModel
 from rest_framework.authtoken.models import Token
 
 
@@ -45,3 +46,46 @@ class RegistrationView(APIView):
 
         return Response(data, status=http_response)
 
+
+class CustomerDetails(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request):
+        serializer = CustomerDetailsSerializers(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            data = {
+                "message": "Added successfully!",
+            }
+            http_response = status.HTTP_200_OK
+
+        else:
+            data = {
+                "message": "serializer.errors",
+            }
+            http_response = status.HTTP_400_BAD_REQUEST
+        return Response(data, status=http_response)
+
+    def get(self, request):
+        customer = customerModel.objects.get(user=request.user)
+        serializer = CustomerDetailsSerializers(customer, many=False)
+
+        return Response(serializer.data)
+
+    def put(self, request, pk):
+        customer = customerModel.objects.get(user=request.user)
+        serializer = CustomerDetailsSerializers(customer, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            data = {
+                "message": "Updated successfully!"
+            }
+            http_response = status.HTTP_200_OK
+
+        else:
+            data = {
+                "message": "Something went wrong"
+            }
+            http_response = status.HTTP_400_BAD_REQUEST
+
+        return Response(data, status=http_response)
