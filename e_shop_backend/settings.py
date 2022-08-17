@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-5p#$qd1!bw-r9y%p(m)#imyez$piy#i)!m=vei59!o^4-7dzvo
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['e-shop-system.herokuapp.com']
 
 AUTH_USER_MODEL = "api.Account"
 
