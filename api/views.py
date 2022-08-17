@@ -200,6 +200,14 @@ class ProductView(APIView):
             }
         )
 
+class SingleProductView(APIView):
+
+    permission_classes = []
+
+    def get(self, request, pk):
+        product = Product.objects.get(id=pk)
+        serializer = ProductSerializers(product, many=False)
+        return Response(serializer.data)
 
 class OrderDetailsView(APIView):
     permission_classes = [IsAuthenticated]

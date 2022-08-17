@@ -21,6 +21,7 @@ urlpatterns = [
     # product
     path('api/v1/product/', ProductView.as_view()),
     path('api/v1/product/update/<str:pk>/', ProductView.as_view()),
+    path('api/v1/product/<str:pk>/', SingleProductView.as_view()),
 
     # cart
     path('api/v1/order/details/', OrderDetailsView.as_view()),
