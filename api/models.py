@@ -119,6 +119,7 @@ class OrderDetails(models.Model):
     user = models.ForeignKey(Account, on_delete=models.CASCADE, null=False, blank=False)
     product_id = models.ForeignKey(Product, on_delete=models.CASCADE, null=False, blank=False)
     quantity = models.IntegerField(default=1)
+    total_price = models.IntegerField()
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
