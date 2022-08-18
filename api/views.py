@@ -66,11 +66,11 @@ class CustomerDetails(APIView):
             http_response = status.HTTP_400_BAD_REQUEST
         return Response(data, status=http_response)
 
-    # def get(self, request):
-    #     customer = customerModel.objects.get(user=request.user)
-    #     serializer = CustomerDetailsSerializers(customer, many=False)
-    #
-    #     return Response(serializer.data)
+    def get(self, request):
+        customer = customerModel.objects.get(user=request.user)
+        serializer = CustomerDetailsSerializers(customer, many=False)
+
+        return Response(serializer.data)
 
     def put(self, request, pk):
         customer = customerModel.objects.get(id=pk)
