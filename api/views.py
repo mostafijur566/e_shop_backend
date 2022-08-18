@@ -48,14 +48,14 @@ class RegistrationView(APIView):
 
 
 class CustomerDetails(APIView):
-    permission_classes = [IsAuthenticated]
+    permission_classes = []
 
     def post(self, request):
         serializer = CustomerDetailsSerializers(data=request.data)
         if serializer.is_valid():
             serializer.save()
             data = {
-                "message": "Added successfully!",
+                "message": "Registration successfully!",
             }
             http_response = status.HTTP_200_OK
 
@@ -66,14 +66,14 @@ class CustomerDetails(APIView):
             http_response = status.HTTP_400_BAD_REQUEST
         return Response(data, status=http_response)
 
-    def get(self, request):
-        customer = customerModel.objects.get(user=request.user)
-        serializer = CustomerDetailsSerializers(customer, many=False)
+    # def get(self, request):
+    #     customer = customerModel.objects.get(user=request.user)
+    #     serializer = CustomerDetailsSerializers(customer, many=False)
+    #
+    #     return Response(serializer.data)
 
-        return Response(serializer.data)
-
-    def put(self, request):
-        customer = customerModel.objects.get(user=request.user)
+    def put(self, request, pk):
+        customer = customerModel.objects.get(id=pk)
         serializer = CustomerDetailsSerializers(customer, data=request.data)
         if serializer.is_valid():
             serializer.save()
