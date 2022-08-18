@@ -68,9 +68,9 @@ class Account(AbstractBaseUser):
 
 
 class CustomerDetails(models.Model):
-    user = models.ForeignKey(Account, on_delete=models.CASCADE, null=False, blank=False)
+    user = models.ForeignKey(Account, on_delete=models.CASCADE, null=True, blank=True)
     name = models.CharField(max_length=60)
-    image = models.ImageField()
+    image = models.ImageField(null=True, blank=True)
     billing_address = models.TextField()
     shipping_address = models.TextField()
     phone = models.CharField(max_length=14)

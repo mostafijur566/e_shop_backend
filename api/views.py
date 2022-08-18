@@ -74,7 +74,7 @@ class CustomerDetails(APIView):
 
     def put(self, request):
         customer = customerModel.objects.get(user=request.user)
-        serializer = CustomerDetailsSerializers(customer, data=request.data)
+        serializer = CustomerDetailsSerializers(customer, data=request.data, partial=True)
         if serializer.is_valid():
             serializer.save()
             data = {
@@ -84,7 +84,7 @@ class CustomerDetails(APIView):
 
         else:
             data = {
-                "message": "Something went wrong"
+                "message": serializer.errors
             }
             http_response = status.HTTP_400_BAD_REQUEST
 
