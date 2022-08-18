@@ -72,8 +72,8 @@ class CustomerDetails(APIView):
 
         return Response(serializer.data)
 
-    def put(self, request, pk):
-        customer = customerModel.objects.get(id=pk)
+    def put(self, request):
+        customer = customerModel.objects.get(user=request.user)
         serializer = CustomerDetailsSerializers(customer, data=request.data)
         if serializer.is_valid():
             serializer.save()
