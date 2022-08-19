@@ -200,14 +200,18 @@ class ProductView(APIView):
             }
         )
 
-class SingleProductView(APIView):
 
+class SingleProductView(APIView):
     permission_classes = []
 
     def get(self, request, pk):
         product = Product.objects.get(id=pk)
         serializer = ProductSerializers(product, many=False)
-        return Response(serializer.data)
+        try:
+            return Response(serializer.data)
+        except Exception as e:
+            return Response(serializer.errors)
+
 
 class OrderDetailsView(APIView):
     permission_classes = [IsAuthenticated]
@@ -327,4 +331,3 @@ class OrderHistoryView(APIView):
                 "order": serializer.data
             }
         )
-
