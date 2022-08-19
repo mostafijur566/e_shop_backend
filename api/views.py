@@ -217,7 +217,7 @@ class OrderDetailsView(APIView):
         if serializer.is_valid():
             serializer.save()
             data = {
-                "message": "Product added successfully!",
+                "message": "Added to your cart successfully!",
             }
             http_response = status.HTTP_200_OK
 
@@ -235,7 +235,7 @@ class OrderDetailsView(APIView):
 
         return Response(
             {
-                "total_order": Product.objects.count(),
+                "total_order": order.count(),
                 "order": serializer.data
             }
         )
