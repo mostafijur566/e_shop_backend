@@ -230,7 +230,7 @@ class OrderDetailsView(APIView):
         return Response(data, status=http_response)
 
     def get(self, request):
-        order = OrderDetails.objects.all()
+        order = OrderDetails.objects.filter(user=request.user)
         serializer = OrderDetailsSerializers(order, many=True)
 
         return Response(
