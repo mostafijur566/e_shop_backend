@@ -47,7 +47,7 @@ class ProductSerializers(serializers.ModelSerializer):
 
 
 class OrderDetailsSerializers(serializers.ModelSerializer):
-    product_id = ProductSerializers()
+    # product_id = ProductSerializers()
     class Meta:
         model = OrderDetails
         fields = '__all__'
