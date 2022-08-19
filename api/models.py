@@ -118,6 +118,9 @@ class Product(models.Model):
 class OrderDetails(models.Model):
     user = models.ForeignKey(Account, on_delete=models.CASCADE, null=False, blank=False)
     product_id = models.ForeignKey(Product, on_delete=models.CASCADE, null=False, blank=False)
+    product_name = models.CharField(max_length=200, null=True, blank=True)
+    product_image = models.CharField(max_length=200, null=True, blank=True)
+    product_price = models.IntegerField(null=True, blank=True)
     quantity = models.IntegerField(default=1)
     total_price = models.IntegerField()
     created_at = models.DateTimeField(auto_now_add=True)

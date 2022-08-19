@@ -217,21 +217,45 @@ class OrderDetailsView(APIView):
     permission_classes = [IsAuthenticated]
 
     def post(self, request):
-        serializer = OrderDetailsSerializers(data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            data = {
-                "message": "Added to your cart successfully!",
-            }
-            http_response = status.HTTP_200_OK
 
-        else:
-            data = {
-                "message": serializer.errors
-            }
-            http_response = status.HTTP_400_BAD_REQUEST
+        data = request.data
 
-        return Response(data, status=http_response)
+        product = Product.objects.get(id=data['product_id'])
+        product_serializer = ProductSerializers(product, many=False)
+        print(product.name)
+
+        order = OrderDetails.objects.create(
+            user=Account.objects.get(username=data['user']),
+            product_id=Product.objects.get(id=data['product_id']),
+            product_name=product_serializer.data['name'],
+            product_image=product_serializer.data['image'],
+            product_price=product_serializer.data['price'],
+            quantity=data['quantity'],
+            total_price=data['total_price']
+        )
+
+        serializer = OrderDetailsSerializers(order, many=False)
+        return Response(
+            {
+                "message": "Added to your cart successfully!"
+            }
+        )
+
+        # serializer = OrderDetailsSerializers(data=request.data)
+        # if serializer.is_valid():
+        #     serializer.save()
+        #     data = {
+        #         "message": "Added to your cart successfully!",
+        #     }
+        #     http_response = status.HTTP_200_OK
+        #
+        # else:
+        #     data = {
+        #         "message": serializer.errors
+        #     }
+        #     http_response = status.HTTP_400_BAD_REQUEST
+        #
+        # return Response(data, status=http_response)
 
     def get(self, request):
         order = OrderDetails.objects.filter(user=request.user)
