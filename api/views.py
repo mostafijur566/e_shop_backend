@@ -213,6 +213,72 @@ class SingleProductView(APIView):
             return Response(serializer.errors)
 
 
+class CartItemsView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request):
+
+        data = request.data
+
+        product = Product.objects.get(id=data['product_id'])
+        product_serializer = ProductSerializers(product)
+        print(product.name)
+
+        order = CartItems.objects.create(
+            user=Account.objects.get(username=data['user']),
+            product_id=Product.objects.get(id=data['product_id']),
+            product_name=product_serializer.data['name'],
+            product_image=product_serializer.data['image'],
+            product_price=product_serializer.data['price'],
+            quantity=data['quantity'],
+            total_price=data['total_price']
+        )
+
+        serializer = CartItems(order)
+        return Response(
+            {
+                "message": "Added to your cart successfully!"
+            }
+        )
+
+    def get(self, request):
+        order = CartItems.objects.filter(user=request.user)
+        serializer = CartItemsSerializers(order, many=True)
+
+        return Response(
+            {
+                "total_order": order.count(),
+                "order": serializer.data
+            }
+        )
+
+    def put(self, request, pk):
+        order = CartItems.objects.get(id=pk)
+        serializer = CartItemsSerializers(order, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            data = {
+                "message": "Updated successfully!",
+            }
+            http_response = status.HTTP_200_OK
+
+        else:
+            data = {
+                "message": serializer.errors
+            }
+            http_response = status.HTTP_400_BAD_REQUEST
+        return Response(data, status=http_response)
+
+    def delete(self, request, pk):
+        order = OrderDetails.objects.get(id=pk)
+        order.delete()
+        return Response(
+            {
+                "message": "Deleted successfully!"
+            }
+        )
+
+
 class OrderDetailsView(APIView):
     permission_classes = [IsAuthenticated]
 
@@ -240,22 +306,6 @@ class OrderDetailsView(APIView):
                 "message": "Added to your cart successfully!"
             }
         )
-
-        # serializer = OrderDetailsSerializers(data=request.data)
-        # if serializer.is_valid():
-        #     serializer.save()
-        #     data = {
-        #         "message": "Added to your cart successfully!",
-        #     }
-        #     http_response = status.HTTP_200_OK
-        #
-        # else:
-        #     data = {
-        #         "message": serializer.errors
-        #     }
-        #     http_response = status.HTTP_400_BAD_REQUEST
-        #
-        # return Response(data, status=http_response)
 
     def get(self, request):
         order = OrderDetails.objects.filter(user=request.user)
@@ -296,7 +346,6 @@ class OrderDetailsView(APIView):
 
 
 class OrderView(APIView):
-
     permission_classes = [IsAuthenticated]
 
     def get(self, request):
@@ -328,7 +377,6 @@ class OrderView(APIView):
             return Response(data, status=http_response)
         except Exception as e:
             return Response(serializer.errors)
-
 
 
 class OrderHistoryView(APIView):

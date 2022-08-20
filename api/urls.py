@@ -24,6 +24,10 @@ urlpatterns = [
     path('api/v1/product/<str:pk>/', SingleProductView.as_view()),
 
     # cart
+    path('api/v1/cart/details/', CartItemsView.as_view()),
+    path('api/v1/cart/details/<str:pk>/', CartItemsView.as_view()),
+
+    # Order Details
     path('api/v1/order/details/', OrderDetailsView.as_view()),
     path('api/v1/order/details/<str:pk>/', OrderDetailsView.as_view()),
 

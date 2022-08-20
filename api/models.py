@@ -115,6 +115,24 @@ class Product(models.Model):
         ordering = ['-updated_at']
 
 
+class CartItems(models.Model):
+    user = models.ForeignKey(Account, on_delete=models.CASCADE, null=False, blank=False)
+    product_id = models.ForeignKey(Product, on_delete=models.CASCADE, null=False, blank=False)
+    product_name = models.CharField(max_length=200, null=True, blank=True)
+    product_image = models.CharField(max_length=200, null=True, blank=True)
+    product_price = models.IntegerField(null=True, blank=True)
+    quantity = models.IntegerField(default=1)
+    total_price = models.IntegerField()
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return self.product_id.name
+
+    class Meta:
+        ordering = ['-updated_at']
+
+
 class OrderDetails(models.Model):
     user = models.ForeignKey(Account, on_delete=models.CASCADE, null=False, blank=False)
     product_id = models.ForeignKey(Product, on_delete=models.CASCADE, null=False, blank=False)
