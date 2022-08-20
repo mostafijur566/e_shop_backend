@@ -253,8 +253,8 @@ class CartItemsView(APIView):
         )
 
     def put(self, request, pk):
-        order = CartItems.objects.get(id=pk)
-        serializer = CartItemsSerializers(order, data=request.data)
+        cart = CartItems.objects.get(id=pk)
+        serializer = CartItemsSerializers(cart, data=request.data)
         if serializer.is_valid():
             serializer.save()
             data = {
@@ -270,7 +270,7 @@ class CartItemsView(APIView):
         return Response(data, status=http_response)
 
     def delete(self, request, pk):
-        order = OrderDetails.objects.get(id=pk)
+        order = CartItems.objects.get(id=pk)
         order.delete()
         return Response(
             {
