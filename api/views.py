@@ -312,20 +312,23 @@ class OrderView(APIView):
 
     def post(self, request):
         serializer = OrderSerializers(data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            data = {
-                "message": "Your order added successfully!",
-            }
-            http_response = status.HTTP_200_OK
+        try:
+            if serializer.is_valid():
+                serializer.save()
+                data = {
+                    "message": "Your order added successfully!",
+                }
+                http_response = status.HTTP_200_OK
 
-        else:
-            data = {
-                "message": serializer.errors
-            }
-            http_response = status.HTTP_400_BAD_REQUEST
+            else:
+                data = {
+                    "message": serializer.errors
+                }
+                http_response = status.HTTP_400_BAD_REQUEST
+            return Response(data, status=http_response)
+        except Exception as e:
+            return Response(serializer.errors)
 
-        return Response(data, status=http_response)
 
 
 class OrderHistoryView(APIView):
