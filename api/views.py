@@ -296,6 +296,9 @@ class OrderDetailsView(APIView):
 
 
 class OrderView(APIView):
+
+    permission_classes = [IsAuthenticated]
+
     def get(self, request):
         order = Order.objects.all()
         serializer = OrderSerializers(order, many=True)

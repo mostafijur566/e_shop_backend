@@ -135,7 +135,9 @@ class OrderDetails(models.Model):
 
 class Order(models.Model):
     user = models.ForeignKey(Account, on_delete=models.CASCADE, null=False, blank=False)
-    orderDetails = models.ManyToManyField(OrderDetails)
+    order_details = models.ManyToManyField(OrderDetails)
+    payment_status = models.CharField(max_length=60)
+    total_price = models.IntegerField()
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
