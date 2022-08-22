@@ -360,6 +360,17 @@ class OrderView(APIView):
         )
 
     def post(self, request):
+
+        data = request.data
+
+        history = OrderHistory.objects.create(
+            user=request.user,
+            payment_status=data['payment_status'],
+            total_amount=data['total_price']
+        )
+
+        history_serializer = OrderHistorySerializers(history)
+
         serializer = OrderSerializers(data=request.data)
         try:
             if serializer.is_valid():
@@ -381,23 +392,6 @@ class OrderView(APIView):
 
 class OrderHistoryView(APIView):
     permission_classes = [IsAuthenticated]
-
-    def post(self, request):
-        serializer = OrderHistorySerializers(data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            data = {
-                "message": "Added to history",
-            }
-            http_response = status.HTTP_200_OK
-
-        else:
-            data = {
-                "message": serializer.errors
-            }
-            http_response = status.HTTP_400_BAD_REQUEST
-
-        return Response(data, status=http_response)
 
     def get(self, request):
         history = OrderHistory.objects.filter(user=request.user)
